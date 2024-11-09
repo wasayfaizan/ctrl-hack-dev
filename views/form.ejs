@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register a Child - Empower Kids</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+      }
+
+      nav {
+        background-color: #2c3e50;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      nav a:hover {
+        background-color: #34495e;
+      }
+
+      .register-header {
+        background-color: #3498db;
+        color: white;
+        text-align: center;
+        padding: 3rem 1rem;
+      }
+
+      .register-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .registration-form {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: bold;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .needs-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .need-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .need-checkbox input {
+        width: auto;
+      }
+
+      .image-preview {
+        width: 200px;
+        height: 200px;
+        border: 2px dashed #ddd;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .submit-btn {
+        background-color: #27ae60;
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1.1rem;
+        transition: background-color 0.3s;
+      }
+
+      .submit-btn:hover {
+        background-color: #219a52;
+      }
+
+      .form-info {
+        margin-top: 2rem;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.9rem;
+        margin-top: 0.3rem;
+      }
+
+      footer {
+        background-color: #34495e;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        nav ul {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .needs-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/form">Register</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/donate">Donate</a></li>
+      </ul>
+    </nav>
+
+    <header class="register-header">
+      <h1>Register a Child</h1>
+      <p>Help us support children in need</p>
+    </header>
+
+    <main class="register-container">
+      <form
+        class="registration-form"
+        id="childRegistrationForm"
+        action="/api/form"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="form-group">
+          <label for="name">Child's Full Name</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" min="0" max="18" required />
+        </div>
+
+        <div class="form-group">
+          <label for="story">Child's Story</label>
+          <textarea id="story" name="story" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Needs</label>
+          <div class="needs-container">
+            <div class="need-checkbox">
+              <input
+                type="checkbox"
+                id="education"
+                name="needs"
+                value="education"
+              />
+              <label for="education">Education</label>
+            </div>
+            <div class="need-checkbox">
+              <input
+                type="checkbox"
+                id="healthcare"
+                name="needs"
+                value="healthcare"
+              />
+              <label for="healthcare">Healthcare</label>
+            </div>
+            <div class="need-checkbox">
+              <input
+                type="checkbox"
+                id="nutrition"
+                name="needs"
+                value="nutrition"
+              />
+              <label for="nutrition">Nutrition</label>
+            </div>
+            <div class="need-checkbox">
+              <input
+                type="checkbox"
+                id="clothing"
+                name="needs"
+                value="clothing"
+              />
+              <label for="clothing">Clothing</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="image">Child's Photo</label>
+          <input type="file" id="image" name="image" accept="image/*" />
+          <div class="image-preview" id="imagePreview"></div>
+        </div>
+
+        <button type="submit" class="submit-btn">Register Child</button>
+      </form>
+
+      <div class="form-info">
+        <h3>Important Information</h3>
+        <ul>
+          <li>All information provided will be kept confidential</li>
+          <li>Please ensure all mandatory fields are filled</li>
+          <li>Upload a clear, recent photo of the child</li>
+          <li>You will be contacted for verification</li>
+        </ul>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Empower Kids. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const imageInput = document.getElementById("image");
+        const imagePreview = document.getElementById("imagePreview");
+
+        imageInput.addEventListener("change", function () {
+          const file = this.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              imagePreview.style.backgroundImage = `url(${e.target.result})`;
+              imagePreview.textContent = "";
+            };
+            reader.readAsDataURL(file);
+          } else {
+            imagePreview.style.backgroundImage = "";
+            imagePreview.textContent = "No image selected";
+          }
+        });
+
+        document
+          .getElementById("childRegistrationForm")
+          .addEventListener("submit", function (e) {
+            const needs = [];
+            document
+              .querySelectorAll('input[name="needs"]:checked')
+              .forEach((checkbox) => {
+                needs.push(checkbox.value);
+              });
+
+            const needsInput = document.createElement("input");
+            needsInput.type = "hidden";
+            needsInput.name = "needs";
+            needsInput.value = JSON.stringify(needs);
+            this.appendChild(needsInput);
+          });
+      });
+    </script>
+  </body>
+</html>

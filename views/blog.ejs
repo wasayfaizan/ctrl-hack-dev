@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog - Empower Kids</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+      }
+
+      nav {
+        background-color: #2c3e50;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      nav a:hover {
+        background-color: #34495e;
+      }
+
+      .blog-header {
+        background-color: #3498db;
+        color: white;
+        text-align: center;
+        padding: 3rem 1rem;
+      }
+
+      .blog-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .blog-card {
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+      }
+
+      .blog-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .blog-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .blog-content {
+        padding: 1.5rem;
+      }
+
+      .blog-content h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+      }
+
+      .blog-content p {
+        color: #666;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+
+      .blog-meta {
+        font-size: 0.9rem;
+        color: #999;
+      }
+
+      .read-more {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 1rem;
+      }
+
+      .read-more:hover {
+        background-color: #2980b9;
+      }
+
+      footer {
+        background-color: #34495e;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        nav ul {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .blog-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/form">Register</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/donate">Donate</a></li>
+      </ul>
+    </nav>
+
+    <header class="blog-header">
+      <h1>Our Blog</h1>
+      <p>Stay updated with our latest news and success stories</p>
+    </header>
+
+    <main class="blog-container">
+      <div class="blog-grid">
+        <!-- Sample blog posts -->
+        <article class="blog-card">
+          <img
+            src="https://via.placeholder.com/400x200"
+            alt="Blog Image"
+            class="blog-image"
+          />
+          <div class="blog-content">
+            <h3>Supporting Education in Rural Areas</h3>
+            <p>
+              Learn about our initiatives to bring quality education to children
+              in rural communities...
+            </p>
+            <div class="blog-meta">Posted on March 15, 2024</div>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+        </article>
+
+        <article class="blog-card">
+          <img
+            src="https://via.placeholder.com/400x200"
+            alt="Blog Image"
+            class="blog-image"
+          />
+          <div class="blog-content">
+            <h3>Success Story: Maria's Journey</h3>
+            <p>
+              Discover how Maria overcame challenges to pursue her dreams of
+              becoming a teacher...
+            </p>
+            <div class="blog-meta">Posted on March 10, 2024</div>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+        </article>
+
+        <article class="blog-card">
+          <img
+            src="https://via.placeholder.com/400x200"
+            alt="Blog Image"
+            class="blog-image"
+          />
+          <div class="blog-content">
+            <h3>Community Impact Report</h3>
+            <p>
+              See the difference we're making in communities across the
+              country...
+            </p>
+            <div class="blog-meta">Posted on March 5, 2024</div>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Empower Kids. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Donate - Empower Kids</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+      }
+
+      nav {
+        background-color: #2c3e50;
+        padding: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      nav a:hover {
+        background-color: #34495e;
+      }
+
+      .donate-header {
+        background-color: #3498db;
+        color: white;
+        text-align: center;
+        padding: 3rem 1rem;
+      }
+
+      .donate-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .donation-form {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+        font-weight: bold;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .amount-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .amount-option {
+        padding: 1rem;
+        text-align: center;
+        border: 2px solid #3498db;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .amount-option:hover {
+        background-color: #3498db;
+        color: white;
+      }
+
+      .amount-option.selected {
+        background-color: #3498db;
+        color: white;
+      }
+
+      .submit-btn {
+        background-color: #27ae60;
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1.1rem;
+        transition: background-color 0.3s;
+      }
+
+      .submit-btn:hover {
+        background-color: #219a52;
+      }
+
+      .donation-info {
+        margin-top: 2rem;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      footer {
+        background-color: #34495e;
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 4rem;
+      }
+
+      @media (max-width: 768px) {
+        nav ul {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/form">Register</a></li>
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="/donate">Donate</a></li>
+      </ul>
+    </nav>
+
+    <header class="donate-header">
+      <h1>Make a Donation</h1>
+      <p>Your support can change a child's life</p>
+    </header>
+
+    <main class="donate-container">
+      <form class="donation-form" id="donationForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="donor.name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="donor.email" required />
+        </div>
+
+        <div class="form-group">
+          <label>Select Amount</label>
+          <div class="amount-options">
+            <div class="amount-option" data-amount="10">$10</div>
+            <div class="amount-option" data-amount="25">$25</div>
+            <div class="amount-option" data-amount="50">$50</div>
+            <div class="amount-option" data-amount="100">$100</div>
+          </div>
+          <input
+            type="number"
+            id="customAmount"
+            name="amount"
+            placeholder="Or enter custom amount"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message (Optional)</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Donate Now</button>
+      </form>
+
+      <div class="donation-info">
+        <h3>How Your Donation Helps</h3>
+        <ul>
+          <li>$10 provides school supplies for one child</li>
+          <li>$25 provides meals for a week</li>
+          <li>$50 covers educational materials for a month</li>
+          <li>$100 sponsors a child's education for three months</li>
+        </ul>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Empower Kids. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const amountOptions = document.querySelectorAll(".amount-option");
+        const customAmount = document.getElementById("customAmount");
+
+        amountOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            // Remove selected class from all options
+            amountOptions.forEach((opt) => opt.classList.remove("selected"));
+            // Add selected class to clicked option
+            this.classList.add("selected");
+            // Set the amount in the custom input
+            customAmount.value = this.dataset.amount;
+          });
+        });
+
+        document
+          .getElementById("donationForm")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            // Add your form submission logic here
+            console.log("Form submitted");
+
+            // Example of form data collection
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            console.log(data);
+
+            // You can add API call here
+            try {
+              const response = await fetch("/api/donations", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              });
+
+              if (response.ok) {
+                alert("Thank you for your donation!");
+                this.reset();
+              } else {
+                alert(
+                  "There was an error processing your donation. Please try again."
+                );
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              alert(
+                "There was an error processing your donation. Please try again."
+              );
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
