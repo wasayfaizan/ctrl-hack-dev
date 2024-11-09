@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Empower Kids</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+      }
+
+      .auth-container {
+        max-width: 400px;
+        margin: 4rem auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      button {
+        width: 100%;
+        padding: 1rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      .auth-links {
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .auth-links a {
+        color: #3498db;
+        text-decoration: none;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+
+      .success-message {
+        color: #27ae60;
+        text-align: center;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        background-color: #d4edda;
+        border-radius: 5px;
+      }
+
+      .user-name {
+        color: #fff;
+        margin-right: 1rem;
+        opacity: 0.9;
+      }
+
+      .logout-btn {
+        background-color: #e74c3c;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      .logout-btn:hover {
+        background-color: #c0392b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-container">
+      <h1>Login</h1>
+      <% if (locals.error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %> <% if (locals.success) { %>
+      <div class="success-message"><%= success %></div>
+      <% } %>
+      <form action="/auth/login" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+      <div class="auth-links">
+        <p>Don't have an account? <a href="/auth/register">Register</a></p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -8,8 +8,18 @@ const path = require("path");
 const Child = require("./models/Child"); // Import the Child model
 const Donation = require("./models/Donation");
 const BlogPost = require("./models/BlogPost");
+const cookieParser = require("cookie-parser");
+const authRoutes = require("./routes/authRoutes");
+const { protect } = require("./controllers/authController");
+const jwt = require("jsonwebtoken");
+const User = require("./models/User");
+const donationController = require("./controllers/donationController");
+const childController = require("./controllers/childController");
 
 const app = express();
+
+// JWT Secret (same as in authController)
+const JWT_SECRET = "your-super-secret-key-here";
 
 // Middleware
 app.use(cors());
@@ -17,10 +27,32 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cookieParser());
+
+// Global middleware to check auth status
+app.use(async (req, res, next) => {
+  try {
+    if (req.cookies.jwt) {
+      const decoded = jwt.verify(req.cookies.jwt, JWT_SECRET);
+      const currentUser = await User.findById(decoded.id);
+      if (currentUser) {
+        res.locals.user = currentUser;
+      } else {
+        res.locals.user = null;
+      }
+    } else {
+      res.locals.user = null;
+    }
+  } catch (err) {
+    res.locals.user = null;
+  }
+  next();
+});
 
 // Set view engine
 app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
@@ -174,6 +206,22 @@ app.post("/api/form", upload.single("image"), async (req, res) => {
   }
 });
 
+// Add auth routes
+app.use("/auth", authRoutes);
+
+// Protect routes that require authentication
+app.use("/form", protect);
+app.use("/donate", protect);
+
+// Add these routes
+app.post("/donate/process", protect, donationController.processDonation);
+app.get("/donate/thank-you", protect, donationController.showThankYou);
+
+// Child registration routes
+app.get("/register-child", protect, childController.showRegistrationForm);
+app.post("/register-child", protect, childController.registerChild);
+app.get("/register-success", protect, childController.showRegistrationSuccess);
+
 // Database connection with debug logging
 mongoose
   .connect("mongodb://127.0.0.1:27017/empower-kids", {
@@ -197,6 +245,14 @@ mongoose
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
+});
+
+// Add this route to test user data
+app.get("/test-auth", (req, res) => {
+  res.json({
+    user: res.locals.user,
+    isAuthenticated: !!res.locals.user,
+  });
 });
 
 const PORT = 3000;

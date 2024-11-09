@@ -1,30 +1,40 @@
 const mongoose = require("mongoose");
 
 const childSchema = new mongoose.Schema({
-  name: {
+  firstName: {
     type: String,
-    required: [true, "Name is required"],
+    required: true,
     trim: true,
   },
-  age: {
-    type: Number,
-    required: [true, "Age is required"],
-    min: [0, "Age cannot be negative"],
-    max: [18, "Age cannot be more than 18"],
-  },
-  story: {
+  lastName: {
     type: String,
-    required: [true, "Story is required"],
+    required: true,
     trim: true,
   },
-  needs: [
-    {
-      type: String,
-      enum: ["education", "healthcare", "nutrition", "clothing"],
-    },
-  ],
-  image: {
+  dateOfBirth: {
+    type: Date,
+    required: true,
+  },
+  gender: {
     type: String,
+    required: true,
+    enum: ["male", "female", "other"],
+  },
+  healthConditions: {
+    type: String,
+    trim: true,
+  },
+  specialNeeds: {
+    type: Boolean,
+    default: false,
+  },
+  birthCertificate: {
+    type: String, // This will store the file path
+  },
+  registeredBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   createdAt: {
     type: Date,

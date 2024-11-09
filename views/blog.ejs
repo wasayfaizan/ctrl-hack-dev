@@ -4,74 +4,88 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog - Empower Kids</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Arial", sans-serif;
+      :root {
+        --primary: #6c63ff;
+        --secondary: #2a2d3e;
+        --accent: #ff6b6b;
+        --background: #1a1c2e;
+        --card: #2a2d3e;
+        --text: #ffffff;
+        --text-secondary: #b3b3b3;
+        --border-radius: 16px;
       }
 
       body {
-        background-color: #f5f5f5;
-      }
-
-      nav {
-        background-color: #2c3e50;
-        padding: 1rem;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-
-      nav ul {
-        list-style: none;
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-      }
-
-      nav a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-      }
-
-      nav a:hover {
-        background-color: #34495e;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--background);
+        color: var(--text);
+        line-height: 1.6;
+        background-image: radial-gradient(
+            circle at 10% 20%,
+            rgba(108, 99, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(255, 107, 107, 0.1) 0%,
+            transparent 50%
+          );
       }
 
       .blog-header {
-        background-color: #3498db;
-        color: white;
         text-align: center;
-        padding: 3rem 1rem;
+        padding: 60px 20px;
+        background: var(--secondary);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .blog-header h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        background: linear-gradient(45deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .blog-header p {
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
       }
 
       .blog-container {
         max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
+        margin: 40px auto;
+        padding: 0 20px;
       }
 
       .blog-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-top: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
       }
 
       .blog-card {
-        background-color: white;
-        border-radius: 10px;
+        background: var(--card);
+        border-radius: var(--border-radius);
         overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
       }
 
       .blog-card:hover {
-        transform: translateY(-5px);
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
       }
 
       .blog-image {
@@ -81,132 +95,238 @@
       }
 
       .blog-content {
-        padding: 1.5rem;
+        padding: 20px;
       }
 
-      .blog-content h3 {
-        color: #2c3e50;
-        margin-bottom: 1rem;
+      .blog-category {
+        display: inline-block;
+        padding: 5px 15px;
+        background: var(--primary);
+        color: var(--text);
+        border-radius: 20px;
+        font-size: 0.8em;
+        margin-bottom: 15px;
       }
 
-      .blog-content p {
-        color: #666;
-        margin-bottom: 1rem;
-        line-height: 1.6;
+      .blog-title {
+        font-size: 1.4em;
+        margin: 10px 0;
+        color: var(--text);
+      }
+
+      .blog-excerpt {
+        color: var(--text-secondary);
+        margin-bottom: 20px;
+        font-size: 0.9em;
       }
 
       .blog-meta {
-        font-size: 0.9rem;
-        color: #999;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9em;
+        color: var(--text-secondary);
+      }
+
+      .blog-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .author-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
       }
 
       .read-more {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        background-color: #3498db;
-        color: white;
+        color: var(--primary);
         text-decoration: none;
-        border-radius: 5px;
-        margin-top: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease;
       }
 
       .read-more:hover {
-        background-color: #2980b9;
+        color: var(--accent);
       }
 
-      footer {
-        background-color: #34495e;
-        color: white;
-        text-align: center;
-        padding: 2rem;
-        margin-top: 4rem;
+      .filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 8px 20px;
+        border: 2px solid var(--primary);
+        border-radius: 25px;
+        background: transparent;
+        color: var(--text);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .search-bar {
+        position: relative;
+        margin-bottom: 30px;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 15px 20px;
+        padding-left: 45px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text);
+        font-size: 1em;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
       }
 
       @media (max-width: 768px) {
-        nav ul {
-          flex-direction: column;
-          text-align: center;
-        }
-
         .blog-grid {
           grid-template-columns: 1fr;
+        }
+
+        .blog-header h1 {
+          font-size: 2em;
         }
       }
     </style>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/form">Register</a></li>
-        <li><a href="/blog">Blog</a></li>
-        <li><a href="/donate">Donate</a></li>
-      </ul>
-    </nav>
-
+    <%- include('partials/navbar', { currentPage: 'blog' }) %>
     <header class="blog-header">
-      <h1>Our Blog</h1>
-      <p>Stay updated with our latest news and success stories</p>
+      <h1>Our Latest Stories</h1>
+      <p>
+        Discover inspiring stories about our work, impact, and the communities
+        we serve.
+      </p>
     </header>
 
-    <main class="blog-container">
-      <div class="blog-grid">
-        <!-- Sample blog posts -->
-        <article class="blog-card">
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="Blog Image"
-            class="blog-image"
-          />
-          <div class="blog-content">
-            <h3>Supporting Education in Rural Areas</h3>
-            <p>
-              Learn about our initiatives to bring quality education to children
-              in rural communities...
-            </p>
-            <div class="blog-meta">Posted on March 15, 2024</div>
-            <a href="#" class="read-more">Read More</a>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="Blog Image"
-            class="blog-image"
-          />
-          <div class="blog-content">
-            <h3>Success Story: Maria's Journey</h3>
-            <p>
-              Discover how Maria overcame challenges to pursue her dreams of
-              becoming a teacher...
-            </p>
-            <div class="blog-meta">Posted on March 10, 2024</div>
-            <a href="#" class="read-more">Read More</a>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <img
-            src="https://via.placeholder.com/400x200"
-            alt="Blog Image"
-            class="blog-image"
-          />
-          <div class="blog-content">
-            <h3>Community Impact Report</h3>
-            <p>
-              See the difference we're making in communities across the
-              country...
-            </p>
-            <div class="blog-meta">Posted on March 5, 2024</div>
-            <a href="#" class="read-more">Read More</a>
-          </div>
-        </article>
+    <div class="blog-container">
+      <div class="search-bar">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search articles..."
+        />
       </div>
-    </main>
 
-    <footer>
-      <p>© 2024 Empower Kids. All rights reserved.</p>
-    </footer>
+      <div class="filters">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Success Stories</button>
+        <button class="filter-btn">Education</button>
+        <button class="filter-btn">Community</button>
+        <button class="filter-btn">Events</button>
+      </div>
+
+      <div class="blog-grid">
+        <!-- Example blog post card -->
+        <article class="blog-card">
+          <img
+            src="https://source.unsplash.com/random/400x300?education"
+            alt="Blog Image"
+            class="blog-image"
+          />
+          <div class="blog-content">
+            <span class="blog-category">Success Stories</span>
+            <h2 class="blog-title">Transforming Lives Through Education</h2>
+            <p class="blog-excerpt">
+              Discover how our educational programs are making a difference in
+              children's lives across communities.
+            </p>
+            <div class="blog-meta">
+              <div class="blog-author">
+                <img
+                  src="https://source.unsplash.com/random/100x100?portrait"
+                  alt="Author"
+                  class="author-avatar"
+                />
+                <span>John Doe</span>
+              </div>
+              <a href="#" class="read-more">
+                Read More <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Repeat similar blog cards with different content -->
+        <!-- You can use EJS to loop through your blog posts -->
+        <% if (locals.posts) { %> <% posts.forEach(post => { %>
+        <article class="blog-card">
+          <img
+            src="<%= post.image %>"
+            alt="<%= post.title %>"
+            class="blog-image"
+          />
+          <div class="blog-content">
+            <span class="blog-category"><%= post.category %></span>
+            <h2 class="blog-title"><%= post.title %></h2>
+            <p class="blog-excerpt"><%= post.excerpt %></p>
+            <div class="blog-meta">
+              <div class="blog-author">
+                <img
+                  src="<%= post.author.avatar %>"
+                  alt="<%= post.author.name %>"
+                  class="author-avatar"
+                />
+                <span><%= post.author.name %></span>
+              </div>
+              <a href="/blog/<%= post.id %>" class="read-more">
+                Read More <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+        <% }); %> <% } %>
+      </div>
+    </div>
+
+    <script>
+      // Filter buttons functionality
+      const filterButtons = document.querySelectorAll(".filter-btn");
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          // Add your filtering logic here
+        });
+      });
+
+      // Search functionality
+      const searchInput = document.querySelector(".search-input");
+      searchInput.addEventListener("input", (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        // Add your search logic here
+      });
+    </script>
   </body>
 </html>

@@ -1,0 +1,27 @@
+<nav>
+  <div class="nav-container">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/form">Register Child</a></li>
+      <li><a href="/donate">Donate</a></li>
+
+      <% if (locals.user) { %>
+      <li class="user-menu">
+        <div class="user-controls">
+          <div class="avatar">
+            <%= user.name.split(' ').map(n =>
+            n[0]).join('').toUpperCase().slice(0, 2) %>
+          </div>
+          <a href="/auth/logout" class="logout-btn" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </div>
+      </li>
+      <% } else { %>
+      <li><a href="/auth/login">Login</a></li>
+      <li><a href="/auth/register">Register</a></li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

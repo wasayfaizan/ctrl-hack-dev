@@ -1,41 +1,51 @@
 const Donation = require("../models/Donation");
-const { validationResult } = require("express-validator");
 
-exports.createDonation = async (req, res) => {
+exports.processDonation = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    const {
+      amount,
+      paymentMethod,
+      cardholderName,
+      cardNumber,
+      expirationDate,
+    } = req.body;
+
+    // Validate amount
+    if (!amount || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid donation amount",
+      });
     }
 
-    const newDonation = new Donation(req.body);
-    await newDonation.save();
-
-    res.status(201).json({
-      success: true,
-      data: newDonation,
+    // Create donation record
+    const donation = new Donation({
+      userId: req.user._id,
+      amount: parseFloat(amount),
+      paymentMethod,
+      cardDetails:
+        paymentMethod === "card"
+          ? {
+              cardholderName,
+              lastFourDigits: cardNumber ? cardNumber.slice(-4) : null,
+              expirationDate,
+            }
+          : undefined,
     });
+
+    await donation.save();
+
+    // Redirect to thank you page
+    res.redirect("/donate/thank-you");
   } catch (error) {
+    console.error("Donation processing error:", error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      message: "Error processing donation",
     });
   }
 };
 
-exports.getDonations = async (req, res) => {
-  try {
-    const donations = await Donation.find()
-      .populate("childId")
-      .sort({ createdAt: -1 });
-    res.json({
-      success: true,
-      data: donations,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
+exports.showThankYou = (req, res) => {
+  res.render("thank-you-donation");
 };

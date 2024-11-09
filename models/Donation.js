@@ -1,30 +1,33 @@
 const mongoose = require("mongoose");
 
 const donationSchema = new mongoose.Schema({
-  donor: {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   amount: {
     type: Number,
     required: true,
   },
-  childId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Child",
+  paymentMethod: {
+    type: String,
+    enum: ["card", "apple_pay", "paypal"],
     required: true,
   },
-  message: String,
+  stripePaymentId: {
+    type: String,
+    required: true,
+  },
+  cardDetails: {
+    cardholderName: String,
+    lastFourDigits: String,
+    expirationDate: String,
+  },
   status: {
     type: String,
     enum: ["pending", "completed", "failed"],
-    default: "pending",
+    default: "completed",
   },
   createdAt: {
     type: Date,
