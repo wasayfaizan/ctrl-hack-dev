@@ -69,45 +69,44 @@
 
       .blog-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 30px;
-        margin-top: 40px;
+        padding: 20px;
       }
 
       .blog-card {
         background: var(--card);
         border-radius: var(--border-radius);
         overflow: hidden;
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease;
         border: 1px solid rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
+        height: 100%;
       }
 
-      .blog-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-      }
-
-      .blog-image {
+      .blog-image-container {
         position: relative;
         width: 100%;
         height: 250px;
         overflow: hidden;
       }
 
-      .blog-image img {
+      .blog-image {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: transform 0.3s ease;
+        display: block;
       }
 
-      .blog-card:hover .blog-image img {
+      .blog-card:hover .blog-image {
         transform: scale(1.1);
       }
 
       .blog-content {
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 250px);
       }
 
       .blog-category {
@@ -129,7 +128,7 @@
       .blog-excerpt {
         color: var(--text-secondary);
         margin-bottom: 20px;
-        font-size: 0.9em;
+        flex-grow: 1;
       }
 
       .blog-meta {
@@ -156,16 +155,19 @@
       }
 
       .read-more {
-        color: var(--primary);
+        display: inline-block;
+        padding: 10px 20px;
+        background: linear-gradient(45deg, var(--primary), var(--accent));
+        color: var(--text);
         text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
+        border-radius: var(--border-radius);
         transition: all 0.3s ease;
+        align-self: flex-start;
       }
 
       .read-more:hover {
-        color: var(--accent);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
       }
 
       .filters {
@@ -223,10 +225,15 @@
       @media (max-width: 768px) {
         .blog-grid {
           grid-template-columns: 1fr;
+          padding: 10px;
         }
 
-        .blog-header h1 {
-          font-size: 2em;
+        .blog-image-container {
+          height: 200px;
+        }
+
+        .blog-content {
+          height: calc(100% - 200px);
         }
       }
 
@@ -303,8 +310,12 @@
       <div class="blog-grid">
         <!-- Education Blogs -->
         <div class="blog-card" data-category="education">
-          <div class="blog-image">
-            <img src="/images/education.jpg" alt="Education" />
+          <div class="blog-image-container">
+            <img
+              src="/images/safed_edu_converted.jpeg"
+              alt="Education"
+              class="blog-image"
+            />
             <span class="category">Education</span>
           </div>
           <div class="blog-content">
@@ -319,10 +330,11 @@
         </div>
 
         <div class="blog-card" data-category="education">
-          <div class="blog-image">
+          <div class="blog-image-container">
             <img
               src="./images/rural_footpath_teaching.jpeg"
               alt="STEM Workshop"
+              class="blog-image"
             />
           </div>
           <div class="blog-content">
@@ -337,10 +349,11 @@
 
         <!-- Healthcare Blogs -->
         <div class="blog-card" data-category="healthcare">
-          <div class="blog-image">
+          <div class="blog-image-container">
             <img
-              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format"
+              src="./images/human_rural_medical_camp.jpeg"
               alt="Medical Camp"
+              class="blog-image"
             />
             <span class="category">Healthcare</span>
           </div>
@@ -356,10 +369,11 @@
 
         <!-- NGO Blogs -->
         <div class="blog-card" data-category="ngo">
-          <div class="blog-image">
+          <div class="blog-image-container">
             <img
-              src="./images/rural_footpath_teaching.jpeg"
+              src="./images/carebridge_ngo_collaboration.jpeg"
               alt="Community Impact"
+              class="blog-image"
             />
             <span class="category">NGO</span>
           </div>
