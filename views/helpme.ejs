@@ -66,6 +66,32 @@
       .container {
         padding: 2rem;
       }
+
+      .btn-group {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-primary {
+        background-color: var(--accent);
+        border: none;
+      }
+
+      .btn-info:hover,
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-info:hover {
+        background-color: var(--primary);
+        opacity: 0.9;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--accent);
+        opacity: 0.9;
+      }
     </style>
   </head>
   <body>
@@ -94,12 +120,20 @@
                 %>
               </td>
               <td>
-                <a
-                  href="/auth/child/<%= child._id %>"
-                  class="btn btn-info btn-sm"
-                >
-                  <i class="fas fa-eye"></i> View ID
-                </a>
+                <div class="btn-group" role="group">
+                  <a
+                    href="/auth/child/<%= child._id %>"
+                    class="btn btn-info btn-sm me-2"
+                  >
+                    <i class="fas fa-eye"></i> View ID
+                  </a>
+                  <a
+                    href="/donate/<%= child._id %>"
+                    class="btn btn-primary btn-sm"
+                  >
+                    <i class="fas fa-heart"></i> Donate
+                  </a>
+                </div>
               </td>
             </tr>
             <% }) %> <% } else { %>

@@ -16,6 +16,9 @@ const User = require("./models/User");
 const donationController = require("./controllers/donationController");
 const childController = require("./controllers/childController");
 const session = require("express-session");
+const donationRoutes = require("./routes/donationRoutes");
+const MongoStore = require("connect-mongo");
+const fs = require("fs-extra");
 
 const app = express();
 
@@ -35,6 +38,13 @@ app.use(
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: "mongodb://localhost:27017/empower-kids",
+      ttl: 24 * 60 * 60,
+    }),
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
   })
 );
 
@@ -230,6 +240,9 @@ app.get("/register-child", protect, childController.showRegistrationForm);
 app.post("/register-child", protect, childController.registerChild);
 app.get("/register-success", protect, childController.showRegistrationSuccess);
 
+// Mount the routes
+app.use("/donate", donationRoutes);
+
 // Database connection with debug logging
 mongoose
   .connect("mongodb://127.0.0.1:27017/empower-kids", {
@@ -266,4 +279,10 @@ app.get("/test-auth", (req, res) => {
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+  process.exit(1);
 });
