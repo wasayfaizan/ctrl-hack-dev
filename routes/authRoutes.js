@@ -317,8 +317,8 @@ router.get("/child/:id/pdf", async (req, res) => {
 
 router.post("/form", upload.single("photo"), async (req, res) => {
   try {
-    console.log("File:", req.file); // Debug log
-    console.log("User:", req.session.userId); // Debug log for user session
+    console.log("Form Data:", req.body);
+    console.log("File:", req.file);
 
     if (!req.file) {
       return res.status(400).send("Please upload a photo");
@@ -331,21 +331,20 @@ router.post("/form", upload.single("photo"), async (req, res) => {
       gender: req.body.gender,
       photo: {
         data: req.file.buffer,
-        contentType: "image/jpeg",
+        contentType: req.file.mimetype,
       },
-      healthConditions: req.body.healthConditions,
+      healthConditions: req.body.healthConditions || "",
       specialNeeds: req.body.specialNeeds === "on",
-      registeredBy: req.session.userId,
       status: "Active",
     });
 
     const savedChild = await newChild.save();
-    console.log("Child saved:", savedChild._id); // Debug log
+    console.log("Child saved successfully:", savedChild._id);
 
     res.redirect("/auth/help-me");
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Error saving child");
+    console.error("Error saving child:", error);
+    res.status(500).send("Error saving child. Please try again.");
   }
 });
 
