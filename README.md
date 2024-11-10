@@ -2,7 +2,7 @@
 <body>
     <header>
         <h1>CareBridge 🌟</h1>
-        <p>Connecting Communities with Care</p>
+        <p>Connecting the unseen to the care they deserve.</p>
     </header>
     <section>
         <h2>📋 Project Overview</h2>
