@@ -89,9 +89,21 @@
       }
 
       .blog-image {
+        position: relative;
         width: 100%;
-        height: 200px;
+        height: 250px;
+        overflow: hidden;
+      }
+
+      .blog-image img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .blog-card:hover .blog-image img {
+        transform: scale(1.1);
       }
 
       .blog-content {
@@ -217,6 +229,49 @@
           font-size: 2em;
         }
       }
+
+      .filter-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin: 30px 0;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 10px 20px;
+        border: 2px solid var(--primary);
+        background: transparent;
+        color: var(--text);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .filter-btn:hover {
+        background: var(--primary);
+        transform: translateY(-2px);
+      }
+
+      .filter-btn.active {
+        background: var(--primary);
+        color: white;
+      }
+
+      .blog-card {
+        transition: all 0.3s ease;
+      }
+
+      @media (max-width: 768px) {
+        .filter-buttons {
+          gap: 10px;
+        }
+        .filter-btn {
+          padding: 8px 15px;
+          font-size: 0.9em;
+        }
+      }
     </style>
   </head>
   <body>
@@ -239,93 +294,112 @@
         />
       </div>
 
-      <div class="filters">
-        <button class="filter-btn active">All</button>
-        <button class="filter-btn">Success Stories</button>
-        <button class="filter-btn">Education</button>
-        <button class="filter-btn">Community</button>
-        <button class="filter-btn">Events</button>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="education">Education</button>
+        <button class="filter-btn" data-category="ngo">NGO</button>
       </div>
 
       <div class="blog-grid">
-        <!-- Example blog post card -->
-        <article class="blog-card">
-          <img
-            src="https://source.unsplash.com/random/400x300?education"
-            alt="Blog Image"
-            class="blog-image"
-          />
+        <!-- Education Blogs -->
+        <div class="blog-card" data-category="education">
+          <div class="blog-image">
+            <img src="/images/education.jpg" alt="Education" />
+            <span class="category">Education</span>
+          </div>
           <div class="blog-content">
-            <span class="blog-category">Success Stories</span>
-            <h2 class="blog-title">Transforming Lives Through Education</h2>
+            <h3>Digital Literacy Program</h3>
+            <p class="blog-date">March 20, 2024</p>
             <p class="blog-excerpt">
-              Discover how our educational programs are making a difference in
-              children's lives across communities.
+              Empowering students with essential digital skills for the modern
+              world.
             </p>
-            <div class="blog-meta">
-              <div class="blog-author">
-                <img
-                  src="https://source.unsplash.com/random/100x100?portrait"
-                  alt="Author"
-                  class="author-avatar"
-                />
-                <span>John Doe</span>
-              </div>
-              <a href="#" class="read-more">
-                Read More <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
+            <a href="/blog/digital-literacy" class="read-more">Read More</a>
           </div>
-        </article>
+        </div>
 
-        <!-- Repeat similar blog cards with different content -->
-        <!-- You can use EJS to loop through your blog posts -->
-        <% if (locals.posts) { %> <% posts.forEach(post => { %>
-        <article class="blog-card">
-          <img
-            src="<%= post.image %>"
-            alt="<%= post.title %>"
-            class="blog-image"
-          />
-          <div class="blog-content">
-            <span class="blog-category"><%= post.category %></span>
-            <h2 class="blog-title"><%= post.title %></h2>
-            <p class="blog-excerpt"><%= post.excerpt %></p>
-            <div class="blog-meta">
-              <div class="blog-author">
-                <img
-                  src="<%= post.author.avatar %>"
-                  alt="<%= post.author.name %>"
-                  class="author-avatar"
-                />
-                <span><%= post.author.name %></span>
-              </div>
-              <a href="/blog/<%= post.id %>" class="read-more">
-                Read More <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
+        <div class="blog-card" data-category="education">
+          <div class="blog-image">
+            <img
+              src="./images/rural_footpath_teaching.jpeg"
+              alt="STEM Workshop"
+            />
           </div>
-        </article>
-        <% }); %> <% } %>
+          <div class="blog-content">
+            <h3>STEM Education Workshop</h3>
+            <p class="blog-date">March 15, 2024</p>
+            <p class="blog-excerpt">
+              Inspiring the next generation of scientists and innovators.
+            </p>
+            <a href="/blog/stem-workshop" class="read-more">Read More</a>
+          </div>
+        </div>
+
+        <!-- Healthcare Blogs -->
+        <div class="blog-card" data-category="healthcare">
+          <div class="blog-image">
+            <img
+              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format"
+              alt="Medical Camp"
+            />
+            <span class="category">Healthcare</span>
+          </div>
+          <div class="blog-content">
+            <h3>Rural Medical Camp Success</h3>
+            <p class="blog-date">March 18, 2024</p>
+            <p class="blog-excerpt">
+              Bringing essential healthcare services to remote communities.
+            </p>
+            <a href="/blog/medical-camp" class="read-more">Read More</a>
+          </div>
+        </div>
+
+        <!-- NGO Blogs -->
+        <div class="blog-card" data-category="ngo">
+          <div class="blog-image">
+            <img
+              src="./images/rural_footpath_teaching.jpeg"
+              alt="Community Impact"
+            />
+            <span class="category">NGO</span>
+          </div>
+          <div class="blog-content">
+            <h3>Community Development Initiative</h3>
+            <p class="blog-date">March 10, 2024</p>
+            <p class="blog-excerpt">
+              Collaborating for greater social impact across communities.
+            </p>
+            <a href="/blog/ngo-partnership" class="read-more">Read More</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <script>
-      // Filter buttons functionality
-      const filterButtons = document.querySelectorAll(".filter-btn");
-      filterButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          filterButtons.forEach((btn) => btn.classList.remove("active"));
-          button.classList.add("active");
-          // Add your filtering logic here
-        });
-      });
+      document.addEventListener("DOMContentLoaded", function () {
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const blogCards = document.querySelectorAll(".blog-card");
 
-      // Search functionality
-      const searchInput = document.querySelector(".search-input");
-      searchInput.addEventListener("input", (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        // Add your search logic here
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            // Remove active class from all buttons
+            filterButtons.forEach((btn) => btn.classList.remove("active"));
+            // Add active class to clicked button
+            button.classList.add("active");
+            const category = button.getAttribute("data-category");
+            blogCards.forEach((card) => {
+              if (category === "all") {
+                card.style.display = "block";
+              } else {
+                if (card.getAttribute("data-category") === category) {
+                  card.style.display = "block";
+                } else {
+                  card.style.display = "none";
+                }
+              }
+            });
+          });
+        });
       });
     </script>
   </body>
