@@ -269,7 +269,12 @@
           </div>
         </div>
 
-        <form id="childRegistrationForm" action="/register-child" method="POST">
+        <form
+          id="childRegistrationForm"
+          action="/auth/form"
+          method="POST"
+          enctype="multipart/form-data"
+        >
           <div class="form-section">
             <h2>Basic Information</h2>
             <div class="form-grid">
@@ -336,18 +341,15 @@
           </div>
 
           <div class="form-group">
-            <label for="photo">Photo</label>
+            <label for="photo">Photo (JPEG only)</label>
             <input
               type="file"
-              class="form-control-file"
+              class="form-control"
               id="photo"
               name="photo"
-              accept="image/*"
+              accept=".jpg,.jpeg"
               required
             />
-            <small class="form-text text-muted"
-              >Please upload a clear photo of the child.</small
-            >
           </div>
 
           <button type="submit" class="submit-btn">Register Child</button>

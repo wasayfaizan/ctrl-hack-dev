@@ -1,0 +1,19 @@
+<div class="children-grid">
+  <% children.forEach(function(child) { %>
+  <div class="child-card">
+    <% if (child.photo && child.photo.data) { %>
+    <img
+      src="/auth/child-photo/<%= child._id %>"
+      alt="Photo of <%= child.firstName %>"
+    />
+    <% } else { %>
+    <div class="no-photo">No Photo Available</div>
+    <% } %>
+    <h3><%= child.firstName %> <%= child.lastName %></h3>
+    <!-- other child details -->
+    <a href="/auth/child/<%= child._id %>/pdf" class="btn btn-primary"
+      >Download PDF</a
+    >
+  </div>
+  <% }); %>
+</div>

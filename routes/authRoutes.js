@@ -10,26 +10,20 @@ const fs = require("fs-extra");
 const QRCode = require("qrcode");
 
 // Configure multer for file upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/uploads/");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, "child-" + uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
+const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 10 * 1024 * 1024, // 10MB limit
   },
-  fileFilter: (req, file, cb) => {
-    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-      return cb(new Error("Only image files are allowed!"), false);
+  fileFilter: function (req, file, cb) {
+    // Accept only jpeg files
+    if (file.mimetype === "image/jpeg") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      cb(new Error("Only jpeg format allowed!"));
     }
-    cb(null, true);
   },
 });
 
@@ -114,9 +108,16 @@ router.get("/child/:id/pdf", async (req, res) => {
       return res.status(404).send("Child not found");
     }
 
-    // Ensure temp directory exists
-    const tempDir = path.join(__dirname, "..", "public", "temp");
+    // Create temp directory
+    const tempDir = path.join(__dirname, "..", "temp");
     await fs.ensureDir(tempDir);
+
+    // Save photo to temp file if it exists
+    let photoPath = null;
+    if (child.photo && child.photo.data) {
+      photoPath = path.join(tempDir, `${child._id}-photo.jpg`);
+      await fs.writeFile(photoPath, child.photo.data);
+    }
 
     // Generate QR Code
     const qrCodeUrl = `${req.protocol}://${req.get("host")}/auth/child/${
@@ -145,7 +146,7 @@ router.get("/child/:id/pdf", async (req, res) => {
       .strokeOpacity(0.2)
       .stroke();
 
-    // Starting Y position with more space at top
+    // Starting Y position
     let yPos = 70;
 
     // Add letterhead
@@ -177,7 +178,7 @@ router.get("/child/:id/pdf", async (req, res) => {
       });
     yPos += 50;
 
-    // Add reference number and date with more spacing
+    // Add reference number and date
     const today = new Date().toLocaleDateString();
     const validityDate = new Date();
     validityDate.setDate(validityDate.getDate() + 15);
@@ -196,28 +197,21 @@ router.get("/child/:id/pdf", async (req, res) => {
       .strokeOpacity(0.1)
       .stroke();
 
-    // Add photo with proper positioning
-    if (child.photo) {
-      try {
-        const photoPath = path.join(__dirname, "..", "public", child.photo);
-        if (fs.existsSync(photoPath)) {
-          doc.image(photoPath, 60, yPos + 15, {
-            fit: [150, 150],
-          });
-        }
-      } catch (photoError) {
-        console.error("Error adding photo:", photoError);
-      }
+    // Add photo from database
+    if (photoPath) {
+      doc.image(photoPath, 60, yPos + 15, {
+        fit: [150, 150],
+      });
     }
 
-    // Add personal details next to photo with more spacing
+    // Add personal details next to photo
     const detailsX = 240;
     doc
       .fontSize(12)
       .fillColor("#2a2d3e")
       .text("PERSONAL INFORMATION", detailsX, yPos + 15);
 
-    // Add personal details with consistent spacing
+    // Add personal details
     const details = [
       { label: "Full Name", value: `${child.firstName} ${child.lastName}` },
       {
@@ -240,13 +234,13 @@ router.get("/child/:id/pdf", async (req, res) => {
         .text(detail.label + ": ", detailsX, detailsY, { continued: true })
         .fillColor("#2a2d3e")
         .text(detail.value);
-      detailsY += 25; // Increased spacing between details
+      detailsY += 25;
     });
 
     // Move position below the box
     yPos += 200;
 
-    // Add QR code with centered positioning
+    // Add QR code
     doc.image(qrCodePath, doc.page.width / 2 - 50, yPos, {
       fit: [100, 100],
     });
@@ -261,7 +255,7 @@ router.get("/child/:id/pdf", async (req, res) => {
       });
     yPos += 30;
 
-    // Add official declaration with proper width
+    // Add official declaration
     doc
       .fontSize(10)
       .fillColor("#2a2d3e")
@@ -284,7 +278,7 @@ router.get("/child/:id/pdf", async (req, res) => {
         }
       );
 
-    // Add footer with absolute positioning
+    // Add footer
     doc
       .fontSize(8)
       .fillColor("#666666")
@@ -308,15 +302,50 @@ router.get("/child/:id/pdf", async (req, res) => {
     // Finalize PDF
     doc.end();
 
-    // Clean up QR code file
-    await fs
-      .remove(qrCodePath)
-      .catch((err) => console.error("Error deleting QR code:", err));
+    // Clean up temporary files
+    if (photoPath) {
+      await fs.remove(photoPath);
+    }
+    await fs.remove(qrCodePath);
   } catch (error) {
     console.error("Detailed error:", error);
     if (!res.headersSent) {
       res.status(500).send("Error generating PDF");
     }
+  }
+});
+
+router.post("/form", upload.single("photo"), async (req, res) => {
+  try {
+    console.log("File:", req.file); // Debug log
+    console.log("User:", req.session.userId); // Debug log for user session
+
+    if (!req.file) {
+      return res.status(400).send("Please upload a photo");
+    }
+
+    const newChild = new Child({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      photo: {
+        data: req.file.buffer,
+        contentType: "image/jpeg",
+      },
+      healthConditions: req.body.healthConditions,
+      specialNeeds: req.body.specialNeeds === "on",
+      registeredBy: req.session.userId,
+      status: "Active",
+    });
+
+    const savedChild = await newChild.save();
+    console.log("Child saved:", savedChild._id); // Debug log
+
+    res.redirect("/auth/help-me");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error saving child");
   }
 });
 
