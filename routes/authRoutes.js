@@ -3,6 +3,35 @@ const router = express.Router();
 const { isAuthenticated } = require("../middleware/auth");
 const Child = require("../models/Child");
 const authController = require("../controllers/authController");
+const PDFDocument = require("pdfkit");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs-extra");
+const QRCode = require("qrcode");
+
+// Configure multer for file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/uploads/");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, "child-" + uniqueSuffix + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return cb(new Error("Only image files are allowed!"), false);
+    }
+    cb(null, true);
+  },
+});
 
 router.get("/login", (req, res) => res.render("login"));
 router.get("/register", (req, res) => res.render("register"));
@@ -10,6 +39,27 @@ router.get("/register", (req, res) => res.render("register"));
 router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.get("/logout", authController.logout);
+
+router.post("/register-child", upload.single("photo"), async (req, res) => {
+  try {
+    const newChild = new Child({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      photo: req.file ? `/uploads/${req.file.filename}` : null,
+      healthConditions: req.body.healthConditions,
+      specialNeeds: req.body.specialNeeds === "on",
+      registeredBy: req.user._id,
+    });
+
+    await newChild.save();
+    res.redirect("/auth/help-me");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error registering child");
+  }
+});
 
 router.get("/help-me", isAuthenticated, async (req, res) => {
   try {
@@ -54,6 +104,219 @@ router.get("/child/:id", isAuthenticated, async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+router.get("/child/:id/pdf", async (req, res) => {
+  try {
+    const child = await Child.findById(req.params.id);
+    if (!child) {
+      return res.status(404).send("Child not found");
+    }
+
+    // Ensure temp directory exists
+    const tempDir = path.join(__dirname, "..", "public", "temp");
+    await fs.ensureDir(tempDir);
+
+    // Generate QR Code
+    const qrCodeUrl = `${req.protocol}://${req.get("host")}/auth/child/${
+      child._id
+    }`;
+    const qrCodePath = path.join(tempDir, `qr-${child._id}.png`);
+    await QRCode.toFile(qrCodePath, qrCodeUrl);
+
+    const doc = new PDFDocument({
+      size: "A4",
+      margin: 50,
+    });
+
+    // Set response headers
+    res.contentType("application/pdf");
+    res.header(
+      "Content-Disposition",
+      `attachment; filename="EmpowerKids-ID-${child._id}.pdf"`
+    );
+    doc.pipe(res);
+
+    // Add page border
+    doc
+      .rect(20, 20, doc.page.width - 40, doc.page.height - 40)
+      .strokeColor("#6c63ff")
+      .strokeOpacity(0.2)
+      .stroke();
+
+    // Starting Y position with more space at top
+    let yPos = 70;
+
+    // Add letterhead
+    doc
+      .fontSize(24)
+      .fillColor("#2a2d3e")
+      .text("EMPOWER KIDS", 50, yPos, {
+        align: "center",
+        width: doc.page.width - 100,
+      });
+    yPos += 40;
+
+    doc
+      .fontSize(12)
+      .fillColor("#666666")
+      .text("Supporting Children in Need", 50, yPos, {
+        align: "center",
+        width: doc.page.width - 100,
+      });
+    yPos += 50;
+
+    // Add document title
+    doc
+      .fontSize(16)
+      .fillColor("#2a2d3e")
+      .text("OFFICIAL IDENTIFICATION DOCUMENT", 50, yPos, {
+        align: "center",
+        width: doc.page.width - 100,
+      });
+    yPos += 50;
+
+    // Add reference number and date with more spacing
+    const today = new Date().toLocaleDateString();
+    const validityDate = new Date();
+    validityDate.setDate(validityDate.getDate() + 15);
+
+    doc.fontSize(10).text(`Reference Number: EK-${child._id}`, 50, yPos);
+    yPos += 20;
+    doc.text(`Issue Date: ${today}`, 50, yPos);
+    yPos += 20;
+    doc.text(`Valid Until: ${validityDate.toLocaleDateString()}`, 50, yPos);
+    yPos += 40;
+
+    // Create a box for photo and details
+    doc
+      .rect(40, yPos, doc.page.width - 80, 180)
+      .strokeColor("#6c63ff")
+      .strokeOpacity(0.1)
+      .stroke();
+
+    // Add photo with proper positioning
+    if (child.photo) {
+      try {
+        const photoPath = path.join(__dirname, "..", "public", child.photo);
+        if (fs.existsSync(photoPath)) {
+          doc.image(photoPath, 60, yPos + 15, {
+            fit: [150, 150],
+          });
+        }
+      } catch (photoError) {
+        console.error("Error adding photo:", photoError);
+      }
+    }
+
+    // Add personal details next to photo with more spacing
+    const detailsX = 240;
+    doc
+      .fontSize(12)
+      .fillColor("#2a2d3e")
+      .text("PERSONAL INFORMATION", detailsX, yPos + 15);
+
+    // Add personal details with consistent spacing
+    const details = [
+      { label: "Full Name", value: `${child.firstName} ${child.lastName}` },
+      {
+        label: "Date of Birth",
+        value: new Date(child.dateOfBirth).toLocaleDateString(),
+      },
+      { label: "Gender", value: child.gender || "Not specified" },
+      {
+        label: "Health Conditions",
+        value: child.healthConditions || "None reported",
+      },
+      { label: "Special Needs", value: child.specialNeeds ? "Yes" : "No" },
+    ];
+
+    let detailsY = yPos + 40;
+    details.forEach((detail) => {
+      doc
+        .fontSize(10)
+        .fillColor("#666666")
+        .text(detail.label + ": ", detailsX, detailsY, { continued: true })
+        .fillColor("#2a2d3e")
+        .text(detail.value);
+      detailsY += 25; // Increased spacing between details
+    });
+
+    // Move position below the box
+    yPos += 200;
+
+    // Add QR code with centered positioning
+    doc.image(qrCodePath, doc.page.width / 2 - 50, yPos, {
+      fit: [100, 100],
+    });
+    yPos += 110;
+
+    doc
+      .fontSize(8)
+      .fillColor("#666666")
+      .text("Scan to verify authenticity", 50, yPos, {
+        align: "center",
+        width: doc.page.width - 100,
+      });
+    yPos += 30;
+
+    // Add official declaration with proper width
+    doc
+      .fontSize(10)
+      .fillColor("#2a2d3e")
+      .text("OFFICIAL DECLARATION", 50, yPos, {
+        align: "center",
+        width: doc.page.width - 100,
+      });
+    yPos += 20;
+
+    doc
+      .fontSize(9)
+      .fillColor("#666666")
+      .text(
+        "This document certifies that the above-mentioned individual is registered with Empower Kids. This identification document is official and contains verified information. The authenticity of this document can be verified by scanning the QR code above.",
+        50,
+        yPos,
+        {
+          align: "justify",
+          width: doc.page.width - 100,
+        }
+      );
+
+    // Add footer with absolute positioning
+    doc
+      .fontSize(8)
+      .fillColor("#666666")
+      .text("Empower Kids Foundation", 50, doc.page.height - 100, {
+        align: "center",
+        width: doc.page.width - 100,
+      })
+      .text(
+        "This document is electronically generated and is valid without a signature.",
+        50,
+        doc.page.height - 80,
+        { align: "center", width: doc.page.width - 100 }
+      )
+      .text(
+        `Document generated on ${new Date().toLocaleString()}`,
+        50,
+        doc.page.height - 60,
+        { align: "center", width: doc.page.width - 100 }
+      );
+
+    // Finalize PDF
+    doc.end();
+
+    // Clean up QR code file
+    await fs
+      .remove(qrCodePath)
+      .catch((err) => console.error("Error deleting QR code:", err));
+  } catch (error) {
+    console.error("Detailed error:", error);
+    if (!res.headersSent) {
+      res.status(500).send("Error generating PDF");
+    }
   }
 });
 

@@ -40,6 +40,38 @@ const childSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  location: {
+    type: String,
+    trim: true,
+  },
+  photo: {
+    data: Buffer,
+    contentType: String,
+  },
+  bloodType: {
+    type: String,
+    trim: true,
+  },
+  height: {
+    type: Number,
+    trim: true,
+  },
+  weight: {
+    type: Number,
+    trim: true,
+  },
+  medicalConditions: {
+    type: String,
+    trim: true,
+  },
+  allergies: {
+    type: String,
+    trim: true,
+  },
+  status: {
+    type: String,
+    default: "Active",
+  },
 });
 
 module.exports = mongoose.model("Child", childSchema);
