@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Child Photo ID - Empower Kids</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c63ff;
+        --secondary: #2a2d3e;
+        --accent: #ff6b6b;
+        --background: #1a1c2e;
+        --card: #2a2d3e;
+        --text: #ffffff;
+      }
+
+      body {
+        padding-top: 100px;
+        background-color: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .photo-id-card {
+        width: 350px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        margin: 20px auto;
+        background: var(--card);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        color: var(--text);
+      }
+
+      .photo-id-header {
+        text-align: center;
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 10px;
+      }
+
+      .photo-id-header h3 {
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      .photo-id-content {
+        margin-bottom: 15px;
+      }
+
+      .photo-id-field {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .photo-id-label {
+        font-weight: bold;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .photo-id-value {
+        color: var(--text);
+      }
+
+      .photo-id-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: rgba(255, 255, 255, 0.7);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 15px;
+      }
+
+      .print-button {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        border: none;
+        margin: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background-color: var(--secondary);
+        border: none;
+        margin: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+        background-color: var(--card);
+        transform: translateY(-2px);
+      }
+
+      @media print {
+        body {
+          background-color: white;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/navbar', { currentPage: 'childPhotoId' }) %>
+
+    <div class="container mt-4">
+      <div class="photo-id-card">
+        <div class="photo-id-header">
+          <h3>Empower Kids</h3>
+          <h5>Child Identification Card</h5>
+        </div>
+
+        <div class="photo-id-content">
+          <div class="photo-id-field">
+            <span class="photo-id-label">ID Number:</span>
+            <span class="photo-id-value"><%= child._id %></span>
+          </div>
+
+          <div class="photo-id-field">
+            <span class="photo-id-label">Name:</span>
+            <span class="photo-id-value"
+              ><%= child.firstName + " " + child.lastName %></span
+            >
+          </div>
+
+          <div class="photo-id-field">
+            <span class="photo-id-label">Year of Birth:</span>
+            <span class="photo-id-value">
+              <% if (child.dateOfBirth) { %> <%= new
+              Date(child.dateOfBirth).getFullYear() %> <% } else { %> N/A <% }
+              %>
+            </span>
+          </div>
+
+          <div class="photo-id-field">
+            <span class="photo-id-label">Registration Date:</span>
+            <span class="photo-id-value">
+              <%= new Date().toLocaleDateString() %>
+            </span>
+          </div>
+        </div>
+
+        <div class="photo-id-footer">
+          <p>This ID card is issued by Empower Kids</p>
+          <small
+            >Valid until: <%= new Date(new Date().setFullYear(new
+            Date().getFullYear() + 1)).toLocaleDateString() %></small
+          >
+        </div>
+      </div>
+
+      <div class="print-button">
+        <button onclick="window.print()" class="btn btn-primary">
+          <i class="fas fa-print"></i> Print ID Card
+        </button>
+        <a href="/auth/help-me" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Back
+        </a>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

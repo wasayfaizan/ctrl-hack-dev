@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Help Me - Empower Kids</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c63ff;
+        --secondary: #2a2d3e;
+        --accent: #ff6b6b;
+        --background: #1a1c2e;
+        --card: #2a2d3e;
+        --text: #ffffff;
+      }
+
+      body {
+        padding-top: 100px;
+        background-color: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .table {
+        background-color: var(--card);
+        color: var(--text);
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 2rem;
+      }
+
+      .table thead th {
+        background-color: var(--secondary);
+        color: var(--text);
+        border: none;
+      }
+
+      .table td {
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .btn-info {
+        background-color: var(--primary);
+        border: none;
+        transition: all 0.3s ease;
+      }
+
+      .btn-info:hover {
+        background-color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      h2 {
+        color: var(--primary);
+        text-align: center;
+        margin: 2rem 0;
+        font-weight: bold;
+      }
+
+      .container {
+        padding: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+
+    <div class="container">
+      <h2>Children Needing Help</h2>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Year of Birth</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (children && children.length > 0) { %> <%
+            children.forEach(child => { %>
+            <tr>
+              <td><%= child.firstName + " " + child.lastName || 'N/A' %></td>
+              <td>
+                <% if (child.dateOfBirth) { %> <%= new
+                Date(child.dateOfBirth).getFullYear() %> <% } else { %> N/A <% }
+                %>
+              </td>
+              <td>
+                <a
+                  href="/auth/child/<%= child._id %>"
+                  class="btn btn-info btn-sm"
+                >
+                  <i class="fas fa-eye"></i> View ID
+                </a>
+              </td>
+            </tr>
+            <% }) %> <% } else { %>
+            <tr>
+              <td colspan="3" class="text-center">
+                No children registered yet.
+              </td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

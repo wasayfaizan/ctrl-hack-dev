@@ -15,6 +15,7 @@ const jwt = require("jsonwebtoken");
 const User = require("./models/User");
 const donationController = require("./controllers/donationController");
 const childController = require("./controllers/childController");
+const session = require("express-session");
 
 const app = express();
 
@@ -29,6 +30,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 // Global middleware to check auth status
 app.use(async (req, res, next) => {
