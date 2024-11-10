@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thank You for Your Donation - CareBridge</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #6c63ff;
+        --secondary: #2a2d3e;
+        --accent: #ff6b6b;
+        --background: #1a1c2e;
+        --card: #2a2d3e;
+        --text: #ffffff;
+        --text-secondary: #b3b3b3;
+        --border-radius: 12px;
+        --transition: all 0.3s ease;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .thank-you-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background: linear-gradient(
+          135deg,
+          rgba(108, 99, 255, 0.1),
+          rgba(255, 107, 107, 0.1)
+        );
+      }
+
+      .thank-you-content {
+        background: var(--card);
+        padding: 3rem;
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .thank-you-icon {
+        font-size: 4rem;
+        color: var(--accent);
+        margin-bottom: 1.5rem;
+        animation: pulse 2s infinite;
+      }
+
+      h1 {
+        color: var(--text);
+        margin-bottom: 1rem;
+        font-size: 2.5rem;
+        font-weight: 600;
+        background: linear-gradient(45deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p {
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+
+      .home-btn,
+      .donate-again-btn {
+        padding: 1rem 2rem;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        font-size: 1.1rem;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .home-btn {
+        background: linear-gradient(45deg, var(--primary), #8983ff);
+        color: white;
+      }
+
+      .donate-again-btn {
+        background: linear-gradient(45deg, var(--accent), #ff8f8f);
+        color: white;
+      }
+
+      .home-btn:hover,
+      .donate-again-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .thank-you-content {
+          padding: 2rem;
+          margin: 1rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        p {
+          font-size: 1rem;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .home-btn,
+        .donate-again-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/navbar', { currentPage: 'donate' }) %>
+
+    <div class="thank-you-container">
+      <div class="thank-you-content">
+        <i class="fas fa-heart thank-you-icon"></i>
+        <h1>Thank You for Your Donation!</h1>
+        <p>
+          Your generosity makes a real difference in children's lives. Together,
+          we can create a brighter future for those in need.
+        </p>
+        <div class="action-buttons">
+          <a href="/" class="home-btn">
+            <i class="fas fa-home"></i>
+            Return Home
+          </a>
+          <a href="/donate" class="donate-again-btn">
+            <i class="fas fa-hand-holding-heart"></i>
+            Donate Again
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

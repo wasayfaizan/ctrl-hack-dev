@@ -286,3 +286,24 @@ process.on("uncaughtException", (err) => {
   console.error("Uncaught Exception:", err);
   process.exit(1);
 });
+
+// Add these routes to your server.js
+
+// POST route for donation form
+app.post("/donate", (req, res) => {
+  try {
+    console.log("Donation received:", req.body);
+    // Process donation here
+    res.redirect("/thank-you-donate"); // Redirect to thank you page
+  } catch (error) {
+    console.error("Error processing donation:", error);
+    res.redirect("/donate"); // Redirect back to donation page if error
+  }
+});
+
+// GET route for thank you page
+app.get("/thank-you-donate", (req, res) => {
+  res.render("thank-you-donate", {
+    currentPage: "donate",
+  });
+});

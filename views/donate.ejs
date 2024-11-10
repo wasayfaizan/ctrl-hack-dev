@@ -214,7 +214,13 @@
     <%- include('partials/navbar', { currentPage: 'donate' }) %>
 
     <div class="donation-container">
-      <form class="donation-form">
+      <form
+        action="/donate"
+        method="POST"
+        class="donation-form"
+        id="donationForm"
+        onsubmit="return validateDonation(event)"
+      >
         <h2>Make a Donation</h2>
 
         <!-- Amount Selection -->
@@ -260,6 +266,7 @@
           type="number"
           class="custom-amount"
           placeholder="Custom Amount"
+          required
         />
 
         <!-- Payment Methods -->
@@ -270,6 +277,7 @@
             id="card"
             class="payment-method"
             checked
+            required
           />
           <label for="card" class="payment-label">
             <i class="fas fa-credit-card payment-icon"></i>
@@ -281,6 +289,7 @@
             name="paymentMethod"
             id="paypal"
             class="payment-method"
+            required
           />
           <label for="paypal" class="payment-label">
             <i class="fab fa-paypal payment-icon"></i>
@@ -292,6 +301,7 @@
             name="paymentMethod"
             id="googlepay"
             class="payment-method"
+            required
           />
           <label for="googlepay" class="payment-label">
             <i class="fab fa-google-pay payment-icon"></i>
@@ -307,19 +317,30 @@
               type="text"
               class="form-input"
               placeholder="1234 5678 9012 3456"
+              required
             />
           </div>
           <div class="form-group">
             <label class="form-label">Card Holder Name</label>
-            <input type="text" class="form-input" placeholder="John Doe" />
+            <input
+              type="text"
+              class="form-input"
+              placeholder="John Doe"
+              required
+            />
           </div>
           <div class="form-group">
             <label class="form-label">Expiry Date</label>
-            <input type="text" class="form-input" placeholder="MM/YY" />
+            <input
+              type="text"
+              class="form-input"
+              placeholder="MM/YY"
+              required
+            />
           </div>
           <div class="form-group">
             <label class="form-label">CVV</label>
-            <input type="text" class="form-input" placeholder="123" />
+            <input type="text" class="form-input" placeholder="123" required />
           </div>
         </div>
 
