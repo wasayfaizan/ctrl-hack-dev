@@ -101,23 +101,6 @@ npm run dev
             <li>Ali Khan</li>
         </ul>
     </section>
-    <section>
-        <h2>📞 Contact</h2>
-        <ul>
-            <li>Website: <a href="https://yourwebsite.com">yourwebsite.com</a></li>
-            <li>Email: your.email@example.com</li>
-            <li>Twitter: <a href="https://twitter.com/yourusername">@yourusername</a></li>
-        </ul>
-    </section>
-    <section>
-        <h2>🙏 Acknowledgments</h2>
-        <ul>
-            <li><a href="https://socket.io/">Socket.IO</a></li>
-            <li><a href="https://expressjs.com/">Express.js</a></li>
-            <li><a href="https://fontawesome.com/">Font Awesome</a></li>
-            <li>All our contributors and supporters</li>
-        </ul>
-    </section>
     <footer>
         <p>© 2024 CareBridge. All rights reserved.</p>
     </footer>
