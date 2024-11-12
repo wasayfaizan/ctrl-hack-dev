@@ -67,29 +67,6 @@ npm start
         </pre>
     </section>
     <section>
-        <h2>📁 Project Structure</h2>
-        <pre>
-carebridge/
-├── server.js
-├── package.json
-├── public/
-│   ├── css/
-│   ├── js/
-│   └── images/
-└── views/
-    ├── index.ejs
-    ├── chat.ejs
-    ├── donate.ejs
-    ├── register.ejs
-    ├── blog.ejs
-    ├── about.ejs
-    └── partials/
-        ├── header.ejs
-        ├── footer.ejs
-        └── navbar.ejs
-        </pre>
-    </section>
-    <section>
         <h2>🛠️ Development</h2>
         <h3>Prerequisites:</h3>
         <ul>
