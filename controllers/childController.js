@@ -11,7 +11,7 @@ exports.registerChild = async (req, res) => {
       specialNeeds,
     } = req.body;
 
-    // Create new child record
+    // Create new child record for the display 
     const child = new Child({
       firstName,
       lastName,
@@ -29,7 +29,7 @@ exports.registerChild = async (req, res) => {
 
     await child.save();
 
-    // Redirect to success page or show success message
+    // Redirect to success page or show success message on the display 
     res.redirect("/register-success");
   } catch (error) {
     console.error("Error registering child:", error);

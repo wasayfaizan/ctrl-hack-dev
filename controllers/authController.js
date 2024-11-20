@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
       password,
     });
 
-    // Redirect to login with success message
+    // Redirect to login with success message to display
     res.render("login", {
       success: "Registration Successful! Please login.",
     });
