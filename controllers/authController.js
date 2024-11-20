@@ -6,7 +6,7 @@ const JWT_SECRET = "your-super-secret-key-here";
 const JWT_EXPIRES_IN = "90d";
 const JWT_COOKIE_EXPIRES_IN = 90;
 
-// Generate JWT token
+// Generate JWT TOKEN 
 const signToken = (id) => {
   return jwt.sign({ id }, JWT_SECRET, {
     expiresIn: JWT_EXPIRES_IN,
@@ -28,7 +28,7 @@ exports.register = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.render("register", {
-        error: "Email already registered",
+        error: "Email is already registered",
       });
     }
 
@@ -41,7 +41,7 @@ exports.register = async (req, res) => {
 
     // Redirect to login with success message
     res.render("login", {
-      success: "Registration successful! Please login.",
+      success: "Registration Successful! Please login.",
     });
   } catch (error) {
     console.error("Registration error:", error);
